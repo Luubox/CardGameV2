@@ -11,15 +11,8 @@ namespace kortSpilConsole
     {
         static void Main(string[] args)
         {
-            Deck myDeck = new Deck();
-            Console.WriteLine(myDeck);
-
-            Card c = myDeck.Draw();
-            Console.WriteLine(c);
-            Console.WriteLine("");
-            Console.WriteLine(myDeck);
-
-            Console.ReadLine();
+            Game myGame = new Game();
+            
         }
     }
 }

@@ -18,7 +18,7 @@ namespace kortSpilConsole
         }
         public override string ToString()
         {
-            return $"[{_value}, {_colour}]";
+            return $"[{_value} {_colour}]";
         }
 
         public string Colour

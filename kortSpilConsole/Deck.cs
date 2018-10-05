@@ -8,57 +8,68 @@ namespace kortSpilConsole
 {
     class Deck
     {
-        List<Card> cards = new List<Card>();
-        //Card[] cards = new Card[76];
+        private List<Card> _cards = new List<Card>();
+        private readonly List<Card> _cardsRevealed = new List<Card>();
+        private Game _game;
 
-        public Deck()
+        public Deck(Game game)
         {
+            this._game = game;
             for (int i = 0; i < 10; i++)
             {
-                // red cards
-                cards.Add(new Card("red", i));
-                cards.Add(new Card("red", i));
-
-                //blue cards
-                cards.Add(new Card("blue", i));
-                cards.Add(new Card("blue", i));
-
-                //green cards
-                cards.Add(new Card("green", i));
-                cards.Add(new Card("green", i));
-
-                //yellow cards
-                cards.Add(new Card("yellow", i));
-                cards.Add(new Card("yellow", i));
-
+                _cards.Add(new Card("Red", i));
+                _cards.Add(new Card("Blue", i));
+                _cards.Add(new Card("Green", i));
+                _cards.Add(new Card("Yellow", i));
+                if (i != 0)
+                {
+                    _cards.Add(new Card("Red", i));
+                    _cards.Add(new Card("Blue", i));
+                    _cards.Add(new Card("Green", i));
+                    _cards.Add(new Card("Yellow", i));
+                }
             }
-
-            shuffle();
+            Shuffle();
+            _cardsRevealed.Add(Draw());
         }
 
         public Card Draw()
         {
-            Card c = cards[0]; //finder øverste kort
-            cards.Remove(c); //fjerner kort fra bunken (c = øverste kort)
-            return c; //giver kortet til den der kalder metoden
+            Card drawnCard = _cards[0]; 
+            _cards.Remove(drawnCard); 
+            return drawnCard; 
         }
 
-        public void shuffle()
+        public bool PlayCard(Card card, Player player)
         {
-            // shuffle array
+            if (card.Colour == _cardsRevealed.Last().Colour || card.Value == _cardsRevealed.Last().Value)
+            {
+                _cardsRevealed.Add(card);
+                player.Hand.Remove(card);
+                return true;
+            }
+            else return false;
+        }
+
+        public Card Peek()
+        {
+            return _cardsRevealed.Last();
+        }
+
+        public void Shuffle()
+        {
             Random random = new Random();
-            cards = cards.OrderBy(x => random.Next()).ToList();
+            _cards = _cards.OrderBy(x => random.Next()).ToList();
         }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < cards.Count; i++)
+            foreach (var card in _cards)
             {
-                sb.Append(cards[i]);
+                sb.Append(card);
                 sb.Append("; ");
             }
-
             return sb.ToString();
         }
     }
